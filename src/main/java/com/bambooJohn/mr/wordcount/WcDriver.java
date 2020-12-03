@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.BZip2Codec;
 import org.apache.hadoop.io.compress.CompressionCodec;
 import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.hadoop.mapreduce.Job;
@@ -29,7 +30,9 @@ public class WcDriver {
         configuration.set("mapreduce.framework.name","yarn");
         configuration.set("mapreduce.app-submission.cross-platform","true"); // 允不允许从windows向Linux提交任务
         configuration.set("yarn.resourcemanager.hostname","hadoop103");
-        Job job = Job.getInstance(configuration);
+
+
+        configuration.set("mapred.job.queue.name","hive");
 
         configuration.setBoolean("mapreduce.map.output.compress",true);
         configuration.setClass("mapreduce.map.output.compress.code", SnappyCodec.class, CompressionCodec.class);
@@ -37,6 +40,7 @@ public class WcDriver {
         configuration.setBoolean("mapreduce.output.fileoutputformat.compress",true);
         configuration.setClass("mapreduce.output.fileoutputformat.compress.code", SnappyCodec.class, CompressionCodec.class);
 
+        Job job = Job.getInstance(configuration);
 
         //2.设置Jar包
      //   job.setJarByClass(WcDriver.class);
